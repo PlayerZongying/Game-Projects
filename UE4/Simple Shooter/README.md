@@ -1,0 +1,1 @@
+# Simple ShooterDOWNLOAD GAME PACKAGE TO RUN THE GAME ON WINDOWS..A simple but fully functioning FPS game demo. Press A, W, S, D to move, space to jump, and left mouse button to shoot.Kill all enemies before they kill you.Use shift + tab to switch and quit the game.
