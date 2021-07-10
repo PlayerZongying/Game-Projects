@@ -12,4 +12,4 @@ Kill all enemies before they kill you.
 
 Use shift + tab to switch and quit the game.
 
-![image](https://github.com/PlayerZongying/Game-Projects/raw/master/img/Simple_Shooter_Preview.png)
+![](https://raw.githubusercontent.com/PlayerZongying/Game-Projects/main/img/Simple_Shooter_Preview.png)
