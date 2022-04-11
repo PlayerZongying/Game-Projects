@@ -1,1 +1,1 @@
-README
+READMEA meet-three game imitating the mobile game "dots".[![Watch the video](https://raw.githubusercontent.com/PlayerZongying/Game-Projects/main/img/fakedots.png)](https://github.com/PlayerZongying/Game-Projects/blob/main/img/fakedots.mp4)
