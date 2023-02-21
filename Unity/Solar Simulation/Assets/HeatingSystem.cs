@@ -11,6 +11,11 @@ public class HeatingSystem : MonoBehaviour
     public float PowerOfHeater;
     [Tooltip("volume of heating, unit: L")]
     public float VolumeOfHeater;
+    public float TempHeaterMax;
+    public float TempHeaterMin;
+    public float TempHeaterAvrage;
+    public float TotalTempInHeater;
+
 
     [Header("Two Pipes")]
 
@@ -27,9 +32,10 @@ public class HeatingSystem : MonoBehaviour
 
     [Header("Stock")]
     public float VolumeOfStock;
-    public float TempAtTop;
-    public float TempAtBottom;
-    public float TempAvrage;
+    public float TempStockMax;
+    public float TempStockMin;
+    public float TempStockAvrage;
+    public float TotalTempInStock;
 
     public float VolumeOfPipe1 => Mathf.PI * RadiusOfPipe1 * RadiusOfPipe1 * LengthOfPipe1;
     public float VolumeOfPipe2 => Mathf.PI * RadiusOfPipe2 * RadiusOfPipe2 * LengthOfPipe2;
@@ -53,9 +59,7 @@ public class HeatingSystem : MonoBehaviour
     public int CubeCountInPipe1 => Mathf.RoundToInt(CubeCount * VolumeOfPipe1 / VolumeTotal);
     public int CubeCountInStock => Mathf.RoundToInt(CubeCount * VolumeOfStock / VolumeTotal);
     public int CubeCountInPipe2 => Mathf.RoundToInt(CubeCount * VolumeOfPipe2 / VolumeTotal);
-    public float TotalTempInStock => CubeCountInHeater * InitTemp;
-    public int FirstIndexOfStock => CubeCountInHeater + CubeCountInPipe1;
-    public int LastIndexOfStock => CubeCountInHeater + CubeCountInPipe1 + CubeCountInStock - 1;
+    public float PowerForCube => PowerOfHeater * CubeVolume / VolumeOfHeater;
 
     private void Awake()
     {
@@ -85,7 +89,12 @@ public class HeatingSystem : MonoBehaviour
     {
         WaterCubeGenerator.Instance.ResetWaterCubes();
         SimulationTime = 0;
-        TempAvrage = InitTemp;
+        TempHeaterMax = InitTemp;
+        TempHeaterMin = InitTemp;
+        TempHeaterAvrage = InitTemp;
+        TempStockMax = InitTemp;
+        TempStockMin = InitTemp;
+        TempStockAvrage = InitTemp;
     }
 
     public void ToggleSystem()
