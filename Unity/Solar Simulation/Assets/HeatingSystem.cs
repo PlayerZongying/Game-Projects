@@ -31,8 +31,12 @@ public class HeatingSystem : MonoBehaviour
     public float TempAtBottom;
     public float TempAvrage;
 
-    private float VolumeOfPipe1 => Mathf.PI * RadiusOfPipe1 * RadiusOfPipe1 * LengthOfPipe1;
-    private float VolumeOfPipe2 => Mathf.PI * RadiusOfPipe2 * RadiusOfPipe2 * LengthOfPipe2;
+    public float VolumeOfPipe1 => Mathf.PI * RadiusOfPipe1 * RadiusOfPipe1 * LengthOfPipe1;
+    public float VolumeOfPipe2 => Mathf.PI * RadiusOfPipe2 * RadiusOfPipe2 * LengthOfPipe2;
+    public float V1 => VolumeOfHeater;
+    public float V2 => VolumeOfHeater + VolumeOfPipe1;
+    public float V3 => VolumeOfHeater + VolumeOfPipe1 + VolumeOfStock;
+    public float V4 => VolumeOfHeater + VolumeOfPipe1 + VolumeOfStock + VolumeOfPipe2;
 
     public float SpeedInPipe1 => VolumeFlowRate / VolumeOfPipe1;
     public float SpeedInPipe2 => VolumeFlowRate / VolumeOfPipe2;
@@ -68,7 +72,7 @@ public class HeatingSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame

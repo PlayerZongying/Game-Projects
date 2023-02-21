@@ -6,9 +6,18 @@ public class WaterCube : MonoBehaviour
 {
     public static HeatingSystem heatingSystem;
     public static Path path;
+    public static float speed;
+
+    // offset, paramiter with volume unit 'L', indicating the absolute position of this water cube  start from heater;
+    // 0 <= offset < total water volume;
     public float offset = 0;
-    public float t = 0;
-    public float speed = 1;
+
+    // t, paramiter with no unit, indicating the relative position of this water cube start from heater;
+    // in heater: 0 <= t < 1;
+    // in pipe1:  1 <= t < 2;
+    // in stock:  2 <= t < 3;
+    // in pipe2:  3 <= t < 4;
+    public float t = 0; 
     public float temperature = 0;
 
     // unit: J/(kg * K)
@@ -22,6 +31,8 @@ public class WaterCube : MonoBehaviour
         //t += offset;
         heatingSystem = HeatingSystem.Instance;
         path = Path.Instance;
+
+        Debug.Log(OffsetToT(10)); ;
     }
 
     // Update is called once per frame
@@ -34,31 +45,11 @@ public class WaterCube : MonoBehaviour
     {
         HeatExchange();
         SetSytemTemperature();
-        speed = GetSpeed(t);
-        t += Time.deltaTime * speed;
-        t %= path.ControlPoints.Count - 1;
+        offset += Time.deltaTime * speed;
+        offset %= heatingSystem.V4;
+        t = OffsetToT(offset);
         Vector3 posInPath = path.PosInPathAt(t);
         this.transform.position = posInPath;
-    }
-
-    float GetSpeed(float t)
-    {
-        if (Mathf.Floor(t) == 0)
-        {
-            return heatingSystem.SpeedInHeater;
-        }
-        else if (Mathf.Floor(t) == 1)
-        {
-            return heatingSystem.SpeedInPipe1;
-        }
-        else if (Mathf.Floor(t) == 2)
-        {
-            return heatingSystem.SpeedInStock;
-        }
-        else
-        {
-            return heatingSystem.SpeedInPipe2;
-        }
     }
 
     public void ObsorbHeat()
@@ -75,12 +66,12 @@ public class WaterCube : MonoBehaviour
 
     public void SetSytemTemperature()
     {
-        if (t < 2 && t + Time.deltaTime * speed > 2)
+        if (offset < heatingSystem.V2 && offset + Time.deltaTime * speed > heatingSystem.V2)
         {
             heatingSystem.TempAtTop = temperature;
             heatingSystem.TempAvrage += temperature / heatingSystem.CubeCountInStock;
         }
-        else if (t < 3 && t + Time.deltaTime * speed > 3)
+        else if (offset < heatingSystem.V3 && offset + Time.deltaTime * speed > heatingSystem.V3)
         {
             heatingSystem.TempAtBottom = temperature;
             heatingSystem.TempAvrage -= temperature / heatingSystem.CubeCountInStock;
@@ -103,6 +94,42 @@ public class WaterCube : MonoBehaviour
         this.gameObject.GetComponent<SpriteRenderer>().color = newColor;
     }
 
+    float OffsetToT(float offset)
+    {
+        float t;
+        Debug.Log(heatingSystem.V1);
+        if (offset < heatingSystem.V1)
+        {
+            t = Remap(0, heatingSystem.V1, offset, 0, 1);
+        }
+        else if(offset < heatingSystem.V2)
+        {
+            t = Remap(heatingSystem.V1, heatingSystem.V2, offset, 1, 2);
+        }
+        else if (offset < heatingSystem.V3)
+        {
+            t = Remap(heatingSystem.V2, heatingSystem.V3, offset, 2, 3);
+        }
+        else
+        {
+            t = Remap(heatingSystem.V3, heatingSystem.V4, offset, 3, 4);
+        }
+        return t;
+    }
 
-    
+    float Remap(float inputMin, float inputMax, float value, float outputMin, float outputMax)
+    {
+        float temp = Mathf.InverseLerp(inputMin, inputMax, value);
+        return Mathf.Lerp(outputMin, outputMax, temp);
+    }
+
+    public void SetOffset(float _offset)
+    {
+        offset = _offset;
+        Debug.Log("in setoffset" + heatingSystem.V1);
+        t = OffsetToT(_offset);
+        Vector3 posInPath = path.PosInPathAt(t);
+        this.transform.position = posInPath;
+    }
+
 }

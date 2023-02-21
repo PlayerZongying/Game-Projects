@@ -30,8 +30,10 @@ public class WaterCubeGenerator : MonoBehaviour
         HeatingSystem = HeatingSystem.Instance;
         HeatingSystem.TempAvrage = HeatingSystem.InitTemp;
         Path = Path.Instance;
+        WaterCube.heatingSystem = HeatingSystem;
+        WaterCube.path = Path;
         WaterCubes = new List<WaterCube>();
-        GenerateWaterCubes(HeatingSystem.CubeCount, Path.ControlPoints.Count - 1);
+        GenerateWaterCubes(HeatingSystem.CubeCount);
     }
 
     // Update is called once per frame
@@ -40,7 +42,7 @@ public class WaterCubeGenerator : MonoBehaviour
         MoveWaterCubes();
     }
 
-    void GenerateWaterCubes(int WaterCubeCount, int CPCount)
+    void GenerateWaterCubes(int WaterCubeCount)
     {
         for (int i = 0; i < WaterCubeCount; i++)
         {
@@ -48,10 +50,12 @@ public class WaterCubeGenerator : MonoBehaviour
             WaterCube NewWaterCube = NewWaterCubeObj.GetComponent<WaterCube>();
             WaterCubes.Add(NewWaterCube);
             //float offset = (float)i * CPCount / WaterCubeCount;
-            float offset = GetOffset(i);
-            NewWaterCube.offset = offset;
-            NewWaterCube.t = offset;
-            NewWaterCube.transform.position = Path.PosInPathAt(offset);
+            //float offset = GetOffset(i);
+            float offset = HeatingSystem.CubeVolume * i;
+            //NewWaterCube.offset = offset;
+            //NewWaterCube.t = offset;
+            NewWaterCube.SetOffset(offset);
+            //NewWaterCube.transform.position = Path.PosInPathAt(offset);
             NewWaterCube.temperature = HeatingSystem.InitTemp;
             NewWaterCube.ChangeColor();
 
@@ -106,6 +110,7 @@ public class WaterCubeGenerator : MonoBehaviour
         if (HeatingSystem.IsOpen)
         {
             HeatingSystem.SimulationTime += Time.deltaTime;
+            WaterCube.speed = HeatingSystem.VolumeFlowRate;
             foreach (WaterCube waterCube in WaterCubes)
             {
                 waterCube.MoveOnPath();
@@ -116,10 +121,11 @@ public class WaterCubeGenerator : MonoBehaviour
 
     public void ResetWaterCubes()
     {
-        foreach (WaterCube waterCube in WaterCubes)
+        for(int i = 0; i <  WaterCubes.Count; i++)
         {
-            waterCube.t = waterCube.offset;
-            waterCube.transform.position = Path.PosInPathAt(waterCube.offset);
+            WaterCube waterCube = WaterCubes[i];
+            float offset = HeatingSystem.CubeVolume * i;
+            waterCube.SetOffset(offset);
             waterCube.temperature = HeatingSystem.InitTemp;
             waterCube.ChangeColor();
         }
