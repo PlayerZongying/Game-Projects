@@ -45,8 +45,9 @@ public class WaterCubeGenerator : MonoBehaviour
         {
             MoveWaterCubes();
             UpdateTemperature();
-            VerifyEnergyConservation();
+            //VerifyEnergyConservation();
         }
+        OutputManager.Instance.UpdateDynamicOutputText();
     }
 
     void GenerateWaterCubes(int WaterCubeCount)

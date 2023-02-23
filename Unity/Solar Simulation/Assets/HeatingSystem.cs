@@ -6,6 +6,9 @@ public class HeatingSystem : MonoBehaviour
 {
     public static HeatingSystem Instance;
 
+    [Header("System")]
+    public bool isStarted;
+
     [Header("Heater")]
     [Tooltip("power of heating, unit: W")]
     public float PowerOfHeater;
@@ -37,8 +40,8 @@ public class HeatingSystem : MonoBehaviour
     public float TempStockAvrage;
     public float TotalTempInStock;
 
-    public float VolumeOfPipe1 => Mathf.PI * RadiusOfPipe1 * RadiusOfPipe1 * LengthOfPipe1;
-    public float VolumeOfPipe2 => Mathf.PI * RadiusOfPipe2 * RadiusOfPipe2 * LengthOfPipe2;
+    public float VolumeOfPipe1 => Mathf.PI * RadiusOfPipe1 * RadiusOfPipe1 * LengthOfPipe1 * 1000; //(m^3 = 1000L)
+    public float VolumeOfPipe2 => Mathf.PI * RadiusOfPipe2 * RadiusOfPipe2 * LengthOfPipe2 * 1000; //(m^3 = 1000L)
     public float V1 => VolumeOfHeater;
     public float V2 => VolumeOfHeater + VolumeOfPipe1;
     public float V3 => VolumeOfHeater + VolumeOfPipe1 + VolumeOfStock;
@@ -76,7 +79,7 @@ public class HeatingSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -87,7 +90,10 @@ public class HeatingSystem : MonoBehaviour
 
     public void ResetSystem()
     {
+        IsOpen = false;
+        isStarted = false;
         WaterCubeGenerator.Instance.ResetWaterCubes();
+        InputManager.Instance.ActivateStaticInput(true);
         SimulationTime = 0;
         TempHeaterMax = InitTemp;
         TempHeaterMin = InitTemp;
@@ -99,6 +105,14 @@ public class HeatingSystem : MonoBehaviour
 
     public void ToggleSystem()
     {
+        if (!isStarted)
+        {
+            WaterCubeGenerator.Instance.ResetWaterCubes();
+            InputManager.Instance.ActivateStaticInput(false);
+            OutputManager.Instance.SetStaticOutputText();
+            isStarted = true;
+        }
         IsOpen = !IsOpen;
     }
+
 }
