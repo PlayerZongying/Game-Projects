@@ -12,10 +12,16 @@ public class LevelController : MonoBehaviour
 
     public List<Construction> Constructions;
 
+    public GameObject ColliderStart;
+    public GameObject ColliderForMovers;
+    public GameObject ColliderForFillers;
     public GameObject ColliderForConstructions;
 
     public GameObject result;
 
+    UIController UIC;
+
+    bool Started = false;
 
     private void Awake()
     {
@@ -32,29 +38,64 @@ public class LevelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        UIC = UIController.instance;
+        UIC.ShowStart();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!Started && Input.GetMouseButtonDown(0))
+        {
+            Started = true;
+            ClearColliders();
+            ColliderForMovers.SetActive(true);
+            UIC.ShowTips1();
+            UIC.ShowButton();
+        }
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
+    public int MoversIntargetCount()
+    {
+        int i = 0;
+        foreach (Dragger mover in Movers)
+        {
+            if (mover.isInTarget) i++;
+        }
+        return i;
     }
 
     public void CheckMoversIntarget()
     {
-        foreach(Dragger mover in Movers)
+        //foreach (Dragger mover in Movers)
+        //{
+        //    if (!mover.isInTarget) return;
+        //}
+        int i = MoversIntargetCount();
+
+        if (i == Movers.Count)
         {
-            if (!mover.isInTarget) return;
+            ShowFiller();
+            UIC.ShowTips2();
+            ClearColliders();
+            ColliderForFillers.SetActive(true);
+        }
+        else
+        {
+            UIC.SetTips1Text("ÍÏ×§ÄÌÅ££¬×°µãÌì¿Õ£¨" + i + "/" + Movers.Count + "£©");
         }
 
 
-        ShowFiller();
     }
 
     void ShowFiller()
     {
-        foreach(Dragger filler in Fillers)
+        foreach (Dragger filler in Fillers)
         {
             float x = Random.Range(-5, 5);
             float y = Random.Range(-4, -2);
@@ -72,11 +113,15 @@ public class LevelController : MonoBehaviour
 
 
         PrepareConstructor();
+        UIC.ShowTips3();
+
+        ClearColliders();
+        ColliderForConstructions.SetActive(true);
     }
 
     private void PrepareConstructor()
     {
-        foreach(Filler filler in Fillers)
+        foreach (Filler filler in Fillers)
         {
             filler.gameObject.SetActive(false);
         }
@@ -102,10 +147,20 @@ public class LevelController : MonoBehaviour
 
 
         ShowFinalResult();
+        UIC.ShowEnd();
     }
 
     private void ShowFinalResult()
     {
         result.SetActive(true);
+    }
+
+
+    private void ClearColliders()
+    {
+        ColliderStart.gameObject.SetActive(false);
+        ColliderForMovers.gameObject.SetActive(false);
+        ColliderForFillers.gameObject.SetActive(false);
+        ColliderForConstructions.gameObject.SetActive(false);
     }
 }
