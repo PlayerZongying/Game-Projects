@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dragger : MonoBehaviour
 {
-    Camera camera;
+    protected Camera camera;
 
     public Transform pivot;
 
@@ -12,19 +12,21 @@ public class Dragger : MonoBehaviour
     Vector3 offsetToMouse;
 
     public Collider2D TargetCollider;
-    Vector3 targetPos;
+    protected Vector3 targetPos;
+    protected Vector3 startPos;
 
     public bool dragable;
     public bool isInTarget;
 
-    LevelController lctrl;
+    protected LevelController lctrl;
 
-    private void Start()
+    protected void Start()
     {
         camera = Camera.main;
         offsetToPivot = pivot.position - this.transform.position;
         dragable = true;
-
+        startPos = this.transform.position;
+        targetPos = startPos;
         lctrl = LevelController.instance;
     }
 
@@ -49,7 +51,7 @@ public class Dragger : MonoBehaviour
         return mousePos;
     }
 
-    private void OnMouseUp()
+    virtual protected void OnMouseUp()
     {
         if (!isInTarget)
         {
@@ -63,7 +65,7 @@ public class Dragger : MonoBehaviour
 
     }
 
-    IEnumerator Back(Vector3 targetPos)
+    protected IEnumerator Back(Vector3 targetPos)
     {
         if (!dragable)
         {
@@ -100,7 +102,7 @@ public class Dragger : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         isInTarget = false;
-        targetPos = Vector3.zero;
+        targetPos = startPos;
     }
 
 }

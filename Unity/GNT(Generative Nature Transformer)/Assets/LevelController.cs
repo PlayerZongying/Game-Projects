@@ -8,7 +8,14 @@ public class LevelController : MonoBehaviour
 
     public List<Dragger> Movers;
 
-    public List<Dragger> Fillers;
+    public List<Filler> Fillers;
+
+    public List<Construction> Constructions;
+
+    public GameObject ColliderForConstructions;
+
+    public GameObject result;
+
 
     private void Awake()
     {
@@ -50,9 +57,55 @@ public class LevelController : MonoBehaviour
         foreach(Dragger filler in Fillers)
         {
             float x = Random.Range(-5, 5);
-            float y = Random.Range(-4, 4);
+            float y = Random.Range(-4, -2);
             filler.gameObject.transform.position = new Vector3(x, y, 0);
             filler.gameObject.SetActive(true);
         }
+    }
+
+    public void CheckFillerIntarget()
+    {
+        foreach (Filler filler in Fillers)
+        {
+            if (!filler.isInTarget) return;
+        }
+
+
+        PrepareConstructor();
+    }
+
+    private void PrepareConstructor()
+    {
+        foreach(Filler filler in Fillers)
+        {
+            filler.gameObject.SetActive(false);
+        }
+
+        foreach (Dragger construction in Constructions)
+        {
+            float x = Random.Range(-5, 5);
+            float y = Random.Range(-4, -2);
+            construction.gameObject.transform.position = new Vector3(x, y, 0);
+            construction.gameObject.SetActive(true);
+        }
+
+        ColliderForConstructions.SetActive(true);
+
+    }
+
+    public void CheckConstructionsIntarget()
+    {
+        foreach (Construction c in Constructions)
+        {
+            if (!c.isInTarget) return;
+        }
+
+
+        ShowFinalResult();
+    }
+
+    private void ShowFinalResult()
+    {
+        result.SetActive(true);
     }
 }
