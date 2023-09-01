@@ -63,8 +63,8 @@ Shader "Custom/SH_Halvorsen"
                 float4 vertex  : SV_POSITION;
                 half2 texcoord : TEXCOORD0;
                 float4 localPos : TEXCOORD1;
-                float4 prelocalPos : TEXCOORD2;
-                float speed : TEXCOORD3;
+                // float4 prelocalPos : TEXCOORD2;
+                // float speed : TEXCOORD3;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 

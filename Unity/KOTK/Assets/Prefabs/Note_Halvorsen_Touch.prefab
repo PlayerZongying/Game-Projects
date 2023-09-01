@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7290811897589586610}
   - component: {fileID: 1215462171491416796}
   - component: {fileID: 2248149311104141724}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5440452457442356508}
-  m_Layer: 0
+  - component: {fileID: 5816755976141032111}
+  m_Layer: 6
   m_Name: Note_Halvorsen_Touch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,8 +129,20 @@ Transform:
   - {fileID: 1169346958510947306}
   - {fileID: 8881980415427179694}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5816755976141032111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216527057766559693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b24c61155eeb6ac4f8ad9f8d8c57323f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &266249806267251139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +214,10 @@ PrefabInstance:
     - target: {fileID: 8987761197008063638, guid: c9e39f215ea654f4ba03349cfef0838c, type: 3}
       propertyPath: m_Name
       value: Trail
+      objectReference: {fileID: 0}
+    - target: {fileID: 8987761197008063638, guid: c9e39f215ea654f4ba03349cfef0838c, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8987761197008063638, guid: c9e39f215ea654f4ba03349cfef0838c, type: 3}
       propertyPath: m_IsActive
